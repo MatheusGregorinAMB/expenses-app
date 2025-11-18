@@ -13,7 +13,10 @@ class ChartBar extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
-          FittedBox(child: Text('R\$${Value.toStringAsFixed(2)}')),
+          Container(
+            height: 20,
+            child: FittedBox(child: Text('R\$${Value.toStringAsFixed(2)}')),
+          ),
           SizedBox(height: 5),
           SizedBox(
             height: 60,
