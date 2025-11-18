@@ -79,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
       value: 199.99,
       date: DateTime.now().subtract(Duration(days: 3)),
     ),
-    
   ];
 
   _addTransaction(String title, double value) {
@@ -146,27 +145,23 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 255, 255, 255),
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
+            DrawerHeader(child: Text('Menu')),
             ListTile(
               leading: Icon(Icons.home),
               title: Text('Home'),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondRoute()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondRoute()),
+                );
               },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Settings'),
               onTap: () {
-                Navigator.pop(context);
+                print("Settings tapped");
+                null;
               },
             ),
           ],
