@@ -28,16 +28,34 @@ class Chart extends StatelessWidget {
     });
   }
 
+  double get _weekTotalValue {
+    return groupedTransaction.fold(0.0, (sum, tr) {
+      return sum + (tr['value'] as double);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     groupedTransaction;
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: groupedTransaction.map((tr) {
-          return ChartBar(tr['day'] as String, tr['value'] as double, 0);
-        }).toList(),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransaction.map((tr) {
+            return Flexible(
+              fit: FlexFit.tight,
+              flex: 2,
+              child: ChartBar(
+                tr['day'] as String,
+                tr['value'] as double,
+                (tr['value'] as double) / _weekTotalValue,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
