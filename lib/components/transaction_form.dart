@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(String, double) onSubmit;
@@ -10,18 +11,35 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
-  final titleController = TextEditingController();
-  final valueController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _valueController = TextEditingController();
+  DateTime? _selectedDate = null;
 
   _submitForm() {
-    final title = titleController.text;
-    final value = double.tryParse(valueController.text) ?? 0.0;
+    final title = _titleController.text;
+    final value = double.tryParse(_valueController.text) ?? 0.0;
 
     if (title.isEmpty || value <= 0) {
       return;
     }
 
     widget.onSubmit(title, value);
+  }
+
+  _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    });
   }
 
   @override
@@ -36,17 +54,35 @@ class _TransactionFormState extends State<TransactionForm> {
             spacing: 50,
             children: <Widget>[
               TextField(
-                controller: titleController,
+                controller: _titleController,
                 decoration: InputDecoration(labelText: 'Titúlo'),
                 onSubmitted: (_) =>
                     _submitForm(), // Quando clicado na seta de envio no teclado, aciona o método
               ),
               TextField(
-                controller: valueController,
+                controller: _valueController,
                 decoration: InputDecoration(labelText: 'Valor R\$'),
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) =>
                     _submitForm(), // Quando clicado na seta de envio no teclado, aciona o método
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    _selectedDate == null
+                        ? 'Nenhuma data selecionada!'
+                        : 'Data: ${DateFormat('dd/MM/yyyy').format(_selectedDate!)}',
+                  ),
+                  TextButton(
+                    onPressed: _showDatePicker,
+                    child: Text(
+                      _selectedDate == null
+                          ? 'Selecionar data'
+                          : 'Selecionar outra data',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
